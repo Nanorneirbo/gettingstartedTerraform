@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "eu-west-1"
-  access_key = "AKIA2CS5WTAEBLTNMGRL"
-  secret_key = "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"
+  access_key = "AKIA2CS5WTAEB35UOK5H"
+  secret_key = "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"
 }
 
 variable "port" {
