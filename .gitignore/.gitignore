@@ -4,3 +4,4 @@
 .idea
 terraform/.terraform
 terraform/.terraform/plugins/windows_amd64/terraform-provider-aws_v2.34.0_x4.exe
+terraform/provider.tf
