@@ -5,20 +5,38 @@ variable "port" {
   type = number
   default = 8080
 }
+data "aws_vpc" "default"{
+  default = true
+}
 
-resource "aws_instance" "example" {
-  ami = "ami-0eff4f2497a2ce392"
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+resource "aws_launch_configuration" "example" {
+  image_id = "ami-0eff4f2497a2ce392"
   instance_type = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.instance.id]
+  security_group = [aws_security_group.instance.id]
   user_data = <<-EOF
               #!/bin/bash
               echo "Hello, World" > index.html
               nohup busybox httpd -f -p 8080 &
               EOF
 
+  lifecycle {
+    create_before_destroy = true
+  }
 
-  tags = {
-    Name = "nanos-instance"
+}
+
+resource "aws_autoscaling_group" "example" {
+  max_size = 2
+  min_size = 10
+
+  tag {
+    key       ="Name"
+    value     ="terraform-asg-example"
+    propagate_at_launch = true
   }
 }
 
